@@ -30,8 +30,10 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
-.env*
+# env files — .env holds public NEXT_PUBLIC_* defaults and is committed on purpose;
+# secrets (e.g. RESEND_API_KEY) belong in .env.local, which stays untracked.
+.env.local
+.env*.local
 
 # vercel
 .vercel
