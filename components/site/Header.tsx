@@ -20,7 +20,7 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-40 bg-white/95 backdrop-blur border-b border-brand-border">
-      <div className="hidden sm:flex bg-brand-navy text-white text-xs">
+      <div className="hidden sm:block bg-brand-navy text-white text-xs">
         <div className="container-page flex items-center justify-between py-1.5">
           <span className="flex items-center gap-1.5">
             <Phone className="h-3 w-3" /> {process.env.NEXT_PUBLIC_COMPANY_PHONE}

@@ -109,7 +109,7 @@ export default async function PublicQuotePage({
               )}
               {!quote.expired && quote.status !== "accepted" && quote.status !== "rejected" && quote.valid_until && (
                 <Banner tone="amber" icon={Clock}>
-                  V&aacute;lida hasta el {formatDate(quote.valid_until)} (72 horas desde su env&iacute;o).
+                  V&aacute;lida hasta el {formatDate(quote.valid_until)}{" "}(72 horas desde su env&iacute;o).
                 </Banner>
               )}
 
