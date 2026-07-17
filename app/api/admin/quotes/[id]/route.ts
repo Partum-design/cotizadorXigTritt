@@ -36,3 +36,22 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
   await supabase.from("quote_events").insert({ quote_id: id, event_type: "updated", metadata: { editor: user.id, item_count: lineItems.length } });
   return NextResponse.json({ ok: true });
 }
+
+export async function DELETE(_request: Request, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
+
+  const { data: quote } = await supabase.from("quotes").select("id").eq("id", id).maybeSingle();
+  if (!quote) return NextResponse.json({ error: "not_found" }, { status: 404 });
+
+  // A quote owns its public token, items and activity trail. The lead is preserved as CRM history.
+  const { error: itemsError } = await supabase.from("quote_items").delete().eq("quote_id", id);
+  if (itemsError) return NextResponse.json({ error: "delete_items_failed" }, { status: 500 });
+  const { error: eventsError } = await supabase.from("quote_events").delete().eq("quote_id", id);
+  if (eventsError) return NextResponse.json({ error: "delete_events_failed" }, { status: 500 });
+  const { error: quoteError } = await supabase.from("quotes").delete().eq("id", id);
+  if (quoteError) return NextResponse.json({ error: "delete_quote_failed" }, { status: 500 });
+  return NextResponse.json({ ok: true });
+}
