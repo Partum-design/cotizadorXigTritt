@@ -22,10 +22,16 @@ export default async function LeadDetailPage({
 
   if (!lead) notFound();
 
+  // A client may have been captured more than once; consolidate their history by email.
+  const { data: relatedLeads } = (await supabase
+    .from("leads")
+    .select("id")
+    .ilike("email", lead.email.trim())) as unknown as { data: Array<{ id: string }> | null };
+  const leadIds = (relatedLeads ?? [{ id }]).map((entry) => entry.id);
   const { data: quotes } = (await supabase
     .from("quotes")
     .select("*")
-    .eq("lead_id", id)
+    .in("lead_id", leadIds)
     .order("created_at", { ascending: false })) as unknown as { data: Quote[] | null };
 
   return (
@@ -58,8 +64,9 @@ export default async function LeadDetailPage({
       </div>
 
       <h2 className="mt-8 mb-3 font-semibold text-brand-navy">
-        Cotizaciones ({quotes?.length ?? 0})
+        Historial de cotizaciones ({quotes?.length ?? 0})
       </h2>
+      <p className="mb-3 text-sm text-slate-500">Se agrupan todas las propuestas vinculadas al correo {lead.email}, aunque el contacto se haya capturado más de una vez.</p>
       <div className="space-y-3">
         {(quotes ?? []).map((q) => (
           <Link

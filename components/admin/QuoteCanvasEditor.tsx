@@ -1,7 +1,8 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Loader2, Plus, Save, Trash2 } from "lucide-react";
+import Link from "next/link";
+import { ExternalLink, Loader2, Plus, Save, Sparkles, Trash2 } from "lucide-react";
 import { formatCurrency } from "@/lib/utils";
 import type { Product, QuoteItem } from "@/lib/database.types";
 
@@ -19,7 +20,7 @@ function fromItem(item: QuoteItem): DraftItem {
   return { key: item.id, productId: item.product_id ?? "", capacity: item.capacity_value ?? 0, material: item.material ?? "", power: item.power ?? "", quantity: item.quantity, unitPrice: item.unit_price };
 }
 
-export function QuoteCanvasEditor({ quoteId, items, products }: { quoteId: string; items: QuoteItem[]; products: Product[] }) {
+export function QuoteCanvasEditor({ quoteId, publicToken, items, products }: { quoteId: string; publicToken: string; items: QuoteItem[]; products: Product[] }) {
   const [draft, setDraft] = useState<DraftItem[]>(items.filter((item) => item.product_id).map(fromItem));
   const [saving, setSaving] = useState(false);
   const [notice, setNotice] = useState<string | null>(null);
@@ -52,7 +53,7 @@ export function QuoteCanvasEditor({ quoteId, items, products }: { quoteId: strin
   };
 
   return <section className="overflow-hidden rounded-xl border border-brand-border bg-white">
-    <div className="flex flex-wrap items-center justify-between gap-3 border-b border-brand-border bg-slate-50 px-5 py-4"><div><p className="font-mono text-[10px] tracking-[.16em] text-brand-blue">CANVAS DE PROPUESTA</p><h2 className="mt-1 font-semibold text-brand-navy">Edita la configuración comercial</h2></div><button type="button" onClick={add} className="flex items-center gap-1.5 rounded-md border border-brand-border bg-white px-3 py-2 text-xs font-semibold text-brand-navy hover:bg-brand-blue-light"><Plus className="h-3.5 w-3.5" />Agregar equipo</button></div>
+    <div className="flex flex-wrap items-center justify-between gap-3 border-b border-brand-border bg-slate-50 px-5 py-4"><div><p className="font-mono text-[10px] tracking-[.16em] text-brand-blue">EDITOR DEL MICROSITIO</p><h2 className="mt-1 font-semibold text-brand-navy">Configura lo que verá el cliente</h2><p className="mt-1 text-xs text-slate-500">Cada partida actualiza automáticamente su ficha, motor, acabado, capacidad y sección de inversión.</p></div><div className="flex items-center gap-2"><Link href={`/cotizacion/${publicToken}`} target="_blank" className="flex items-center gap-1.5 rounded-md border border-brand-border bg-white px-3 py-2 text-xs font-semibold text-brand-navy hover:bg-brand-blue-light"><ExternalLink className="h-3.5 w-3.5" />Vista previa</Link><button type="button" onClick={add} className="flex items-center gap-1.5 rounded-md bg-brand-navy px-3 py-2 text-xs font-semibold text-white hover:bg-brand-navy-dark"><Plus className="h-3.5 w-3.5" />Agregar equipo</button></div></div>
     <div className="space-y-4 p-4 sm:p-5">
       {draft.map((item, index) => {
         const product = products.find((entry) => entry.id === item.productId);
@@ -61,7 +62,7 @@ export function QuoteCanvasEditor({ quoteId, items, products }: { quoteId: strin
       {!draft.length && <p className="rounded-lg border border-dashed border-brand-border p-5 text-center text-sm text-slate-500">Agrega un equipo para comenzar la propuesta.</p>}
     </div>
     <div className="flex flex-wrap items-center justify-between gap-4 border-t border-brand-border bg-slate-50 p-5"><div className="text-sm text-slate-500">Subtotal <span className="ml-2 font-bold text-brand-navy">{formatCurrency(totals.subtotal)}</span> <span className="mx-2 text-slate-300">·</span>Total <span className="ml-2 font-bold text-brand-navy">{formatCurrency(totals.total)}</span></div><button type="button" onClick={save} disabled={saving} className="flex items-center gap-2 rounded-md bg-brand-navy px-4 py-2.5 text-sm font-semibold text-white hover:bg-brand-navy-dark disabled:opacity-60">{saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}Guardar edición</button></div>
-    {notice && <p className={`mx-5 mb-5 rounded-md px-3 py-2 text-xs ${notice.startsWith("Propuesta") ? "bg-green-50 text-green-700" : "bg-red-50 text-red-600"}`}>{notice}</p>}
+    {notice && <p className={`mx-5 mb-5 flex items-center gap-2 rounded-md px-3 py-2 text-xs ${notice.startsWith("Propuesta") ? "bg-green-50 text-green-700" : "bg-red-50 text-red-600"}`}>{notice.startsWith("Propuesta") && <Sparkles className="h-3.5 w-3.5" />}{notice}</p>}
   </section>;
 }
 

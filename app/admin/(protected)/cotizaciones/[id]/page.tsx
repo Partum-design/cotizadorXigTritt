@@ -120,7 +120,7 @@ export default async function QuoteDetailPage({
             </div>
           </div>
 
-          <QuoteCanvasEditor quoteId={quote.id} items={items ?? []} products={products ?? []} />
+          <QuoteCanvasEditor quoteId={quote.id} publicToken={quote.public_token} items={items ?? []} products={products ?? []} />
 
           <div className="rounded-xl border border-brand-border bg-white p-5">
             <h2 className="mb-4 font-semibold text-brand-navy">Historial de actividad</h2>
