@@ -26,9 +26,9 @@ export default async function AdminLeadsPage({
 
   return (
     <div>
-      <h1 className="text-2xl font-extrabold text-brand-navy">Leads</h1>
+      <h1 className="text-2xl font-extrabold text-brand-navy">Clientes</h1>
       <p className="mt-1 text-sm text-slate-500">
-        Todos los contactos que han generado una cotizaci&oacute;n.
+        Perfiles creados automáticamente al generar una cotización, con su historial comercial.
       </p>
 
       <div className="mt-4 flex flex-wrap gap-2">
@@ -54,7 +54,7 @@ export default async function AdminLeadsPage({
             {filtered.length === 0 && (
               <tr>
                 <td colSpan={6} className="px-4 py-8 text-center text-slate-400">
-                  No hay leads en esta categor&iacute;a.
+                  No hay clientes en esta categor&iacute;a.
                 </td>
               </tr>
             )}
