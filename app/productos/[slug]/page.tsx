@@ -3,7 +3,7 @@ import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
-import { ProductIcon } from "@/components/icons";
+import { ProductVisual } from "@/components/catalog/ProductVisual";
 import { ProductConfigurator } from "@/components/catalog/ProductConfigurator";
 import { ProductCard } from "@/components/catalog/ProductCard";
 import { createClient } from "@/lib/supabase/server";
@@ -69,11 +69,10 @@ export default async function ProductDetailPage({
 
         <div className="container-page grid gap-10 py-10 lg:grid-cols-2">
           <div>
-            <div className="flex aspect-[4/3] items-center justify-center rounded-xl border border-brand-border bg-brand-blue-light">
-              <ProductIcon icon={product.icon} className="h-32 w-32 text-brand-blue" />
-            </div>
+            <ProductVisual name={product.name} icon={product.icon} material={product.material_options[0]} photo className="aspect-[4/3] rounded-2xl border border-[#1e3d4c] shadow-xl" />
             <div className="mt-6 space-y-4">
               <div>
+                <p className="font-mono text-[10px] tracking-[.18em] text-brand-blue">PLATAFORMA INDUSTRIAL CONFIGURABLE</p>
                 <h1 className="text-2xl font-extrabold text-brand-navy">{product.name}</h1>
                 {product.model_code && (
                   <p className="mt-1 text-sm font-medium text-slate-500">
@@ -81,15 +80,20 @@ export default async function ProductDetailPage({
                   </p>
                 )}
               </div>
-              <p className="text-slate-600">{product.description}</p>
+              <p className="leading-7 text-slate-600">{product.description || product.short_description || "Equipo industrial diseñado para procesos continuos y configurado según su operación."}</p>
               {product.specs && (
-                <div className="rounded-lg bg-slate-50 p-4">
+                <div className="rounded-xl border border-[#dbe6ea] bg-slate-50 p-4">
                   <h3 className="mb-2 text-xs font-bold uppercase tracking-wide text-slate-500">
                     Especificaciones
                   </h3>
-                  <p className="text-sm text-slate-700">{product.specs}</p>
+                  <p className="whitespace-pre-line text-sm leading-6 text-slate-700">{product.specs}</p>
                 </div>
               )}
+              <div className="grid grid-cols-3 divide-x divide-[#dbe6ea] rounded-xl border border-[#dbe6ea] bg-white text-center">
+                <div className="p-3"><p className="font-mono text-[10px] text-brand-blue">CAPACIDAD</p><p className="mt-1 text-xs font-bold text-brand-navy">{product.capacity_min}–{product.capacity_max} {product.capacity_unit}</p></div>
+                <div className="p-3"><p className="font-mono text-[10px] text-brand-blue">CONTROL</p><p className="mt-1 text-xs font-bold text-brand-navy">TEFC / IP55</p></div>
+                <div className="p-3"><p className="font-mono text-[10px] text-brand-blue">SOPORTE</p><p className="mt-1 text-xs font-bold text-brand-navy">1 año garantía</p></div>
+              </div>
             </div>
           </div>
 

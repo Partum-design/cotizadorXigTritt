@@ -4,8 +4,9 @@ import { ArrowLeft, Circle } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { StatusBadge } from "@/components/admin/Badge";
 import { QuoteActionsPanel } from "@/components/admin/QuoteActionsPanel";
+import { QuoteCanvasEditor } from "@/components/admin/QuoteCanvasEditor";
 import { formatCurrency, formatDate } from "@/lib/utils";
-import type { Lead, Quote, QuoteEvent, QuoteItem } from "@/lib/database.types";
+import type { Lead, Product, Quote, QuoteEvent, QuoteItem } from "@/lib/database.types";
 
 const EVENT_LABELS: Record<string, string> = {
   created: "Cotización creada",
@@ -17,6 +18,7 @@ const EVENT_LABELS: Record<string, string> = {
   rejected: "Cotización rechazada",
   invoiced: "Marcada como facturada",
   resent: "Correo reenviado",
+  updated: "Propuesta editada",
   note: "Nota interna",
 };
 
@@ -36,7 +38,7 @@ export default async function QuoteDetailPage({
 
   if (!quote) notFound();
 
-  const [{ data: lead }, { data: items }, { data: events }] = await Promise.all([
+  const [{ data: lead }, { data: items }, { data: events }, { data: products }] = await Promise.all([
     supabase.from("leads").select("*").eq("id", quote.lead_id).maybeSingle() as unknown as Promise<{
       data: Lead | null;
     }>,
@@ -48,6 +50,7 @@ export default async function QuoteDetailPage({
       .select("*")
       .eq("quote_id", id)
       .order("created_at", { ascending: false }) as unknown as Promise<{ data: QuoteEvent[] | null }>,
+    supabase.from("products").select("*").order("sort_order") as unknown as Promise<{ data: Product[] | null }>,
   ]);
 
   const expired =
@@ -116,6 +119,8 @@ export default async function QuoteDetailPage({
               )}
             </div>
           </div>
+
+          <QuoteCanvasEditor quoteId={quote.id} items={items ?? []} products={products ?? []} />
 
           <div className="rounded-xl border border-brand-border bg-white p-5">
             <h2 className="mb-4 font-semibold text-brand-navy">Historial de actividad</h2>

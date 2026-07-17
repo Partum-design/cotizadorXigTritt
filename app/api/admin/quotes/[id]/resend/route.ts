@@ -16,11 +16,18 @@ export async function POST(
 
   const { data: quote } = await supabase.from("quotes").select("*").eq("id", id).maybeSingle();
   if (!quote) return NextResponse.json({ error: "not_found" }, { status: 404 });
+  if (quote.status === "accepted" || quote.status === "rejected") {
+    return NextResponse.json({ error: "closed_quote" }, { status: 409 });
+  }
 
   const { data: lead } = await supabase.from("leads").select("*").eq("id", quote.lead_id).maybeSingle();
   const { data: items } = await supabase.from("quote_items").select("*").eq("quote_id", id);
 
   if (!lead) return NextResponse.json({ error: "lead_not_found" }, { status: 404 });
+
+  // Every resend becomes a fresh 72-hour commercial window for the same public micro site.
+  const validUntil = new Date(Date.now() + 72 * 3600 * 1000).toISOString();
+  await supabase.from("quotes").update({ valid_until: validUntil, status: "sent", sent_at: new Date().toISOString() }).eq("id", id);
 
   const result = await sendQuoteEmail(lead.email, {
     token: quote.public_token,
@@ -29,14 +36,14 @@ export async function POST(
     subtotal: Number(quote.subtotal),
     tax: Number(quote.tax),
     total: Number(quote.total),
-    validUntil: quote.valid_until ?? new Date(Date.now() + 72 * 3600 * 1000).toISOString(),
+    validUntil,
     items: (items ?? []) as never,
   });
 
   await supabase.from("quote_events").insert({
     quote_id: id,
     event_type: "resent",
-    metadata: { sent: result.sent },
+    metadata: { sent: result.sent, valid_until: validUntil },
   });
 
   return NextResponse.json({ sent: result.sent });

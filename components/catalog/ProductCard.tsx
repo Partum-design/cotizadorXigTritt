@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { ProductIcon } from "@/components/icons";
+import { ProductVisual } from "@/components/catalog/ProductVisual";
 import { formatCurrency } from "@/lib/utils";
 import type { Product } from "@/lib/database.types";
 
@@ -8,11 +9,13 @@ export function ProductCard({ product }: { product: Product }) {
   return (
     <Link
       href={`/productos/${product.slug}`}
-      className="group flex flex-col rounded-xl border border-brand-border bg-white p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
+      className="group flex flex-col overflow-hidden rounded-2xl border border-brand-border bg-white shadow-sm transition-all hover:-translate-y-1 hover:border-[#98cbdc] hover:shadow-xl"
     >
+      <ProductVisual name={product.name} icon={product.icon} compact className="h-40" />
+      <div className="p-5">
       <div className="flex items-start justify-between">
-        <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-brand-blue-light text-brand-blue">
-          <ProductIcon icon={product.icon} className="h-7 w-7" />
+        <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-brand-blue-light text-brand-blue">
+          <ProductIcon icon={product.icon} className="h-5 w-5" />
         </div>
         {product.model_code && (
           <span className="rounded-full bg-slate-100 px-2.5 py-1 text-[11px] font-semibold text-slate-500">
@@ -33,6 +36,7 @@ export function ProductCard({ product }: { product: Product }) {
         <span className="flex items-center gap-1 text-sm font-semibold text-brand-blue">
           Configurar <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
         </span>
+      </div>
       </div>
     </Link>
   );

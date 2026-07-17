@@ -111,6 +111,7 @@ export interface QuoteEvent {
     | "rejected"
     | "invoiced"
     | "resent"
+    | "updated"
     | "note";
   metadata: Record<string, unknown>;
   ip: string | null;

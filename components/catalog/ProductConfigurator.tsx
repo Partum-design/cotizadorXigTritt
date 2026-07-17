@@ -2,7 +2,8 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
-import { Check, ShoppingCart } from "lucide-react";
+import { Check, ShoppingCart, ShieldCheck, Sparkles, Zap } from "lucide-react";
+import { ProductVisual } from "@/components/catalog/ProductVisual";
 import { useCart } from "@/lib/cart-context";
 import { estimateUnitPrice } from "@/lib/pricing";
 import { formatCurrency } from "@/lib/utils";
@@ -55,8 +56,11 @@ export function ProductConfigurator({
   };
 
   return (
-    <div className="rounded-xl border border-brand-border bg-white p-6 shadow-sm h-fit sticky top-24">
-      <h2 className="text-lg font-bold text-brand-navy">Configura tu equipo</h2>
+    <div className="h-fit overflow-hidden rounded-2xl border border-[#cbdde4] bg-white shadow-[0_16px_35px_rgba(26,58,75,.10)] lg:sticky lg:top-24">
+      <ProductVisual name={product.name} icon={product.icon} material={material} capacity={capacity} compact className="h-44" />
+      <div className="p-6">
+      <p className="font-mono text-[10px] tracking-[.17em] text-brand-blue">CONFIGURADOR TÉCNICO</p>
+      <h2 className="mt-1 text-lg font-bold text-brand-navy">Configura tu equipo</h2>
       <p className="mt-1 text-sm text-slate-500">
         Ajusta las especificaciones y agrega el equipo a tu cotizaci&oacute;n.
       </p>
@@ -92,33 +96,23 @@ export function ProductConfigurator({
 
         <div>
           <label className="text-sm font-semibold text-slate-700">Material</label>
-          <select
-            value={material}
-            onChange={(e) => setMaterial(e.target.value)}
-            className="mt-1.5 w-full rounded-md border border-brand-border bg-white px-3 py-2 text-sm focus:border-brand-blue focus:outline-none"
-          >
+          <div className="mt-2 flex flex-wrap gap-2">
             {product.material_options.map((m) => (
-              <option key={m} value={m}>
+              <button type="button" key={m} onClick={() => setMaterial(m)} className={`rounded-lg border px-3 py-2 text-xs font-semibold ${material === m ? "border-brand-blue bg-brand-blue-light text-brand-blue" : "border-brand-border text-slate-600 hover:border-brand-blue"}`}>
                 {m}
-              </option>
+              </button>
             ))}
-          </select>
+          </div>
         </div>
 
         {product.power_options.length > 0 && (
           <div>
             <label className="text-sm font-semibold text-slate-700">Potencia del motor</label>
-            <select
-              value={power}
-              onChange={(e) => setPower(e.target.value)}
-              className="mt-1.5 w-full rounded-md border border-brand-border bg-white px-3 py-2 text-sm focus:border-brand-blue focus:outline-none"
-            >
+            <div className="mt-2 grid gap-2">
               {product.power_options.map((p) => (
-                <option key={p} value={p}>
-                  {p}
-                </option>
+                <button type="button" key={p} onClick={() => setPower(p)} className={`flex items-center gap-2 rounded-lg border px-3 py-2 text-left text-xs font-semibold ${power === p ? "border-brand-blue bg-brand-blue-light text-brand-blue" : "border-brand-border text-slate-600 hover:border-brand-blue"}`}><Zap className="h-3.5 w-3.5" />{p}</button>
               ))}
-            </select>
+            </div>
           </div>
         )}
 
@@ -161,7 +155,7 @@ export function ProductConfigurator({
         </div>
       </div>
 
-      <div className="mt-6 flex items-center justify-between rounded-lg bg-brand-blue-light p-4">
+      <div className="mt-6 flex items-center justify-between rounded-xl bg-brand-blue-light p-4">
         <span className="text-sm font-medium text-brand-navy">Precio estimado / unidad</span>
         <span className="text-xl font-extrabold text-brand-navy">{formatCurrency(unitPrice)}</span>
       </div>
@@ -191,6 +185,8 @@ export function ProductConfigurator({
           Ver mi cotizaci&oacute;n &rarr;
         </Link>
       )}
+      <div className="mt-5 grid grid-cols-2 gap-2 border-t border-brand-border pt-4 text-[11px] text-slate-500"><span className="flex items-center gap-1"><ShieldCheck className="h-3.5 w-3.5 text-brand-blue" />Garantía de un año</span><span className="flex items-center gap-1"><Sparkles className="h-3.5 w-3.5 text-brand-blue" />Propuesta por 72 h</span></div>
+      </div>
     </div>
   );
 }
