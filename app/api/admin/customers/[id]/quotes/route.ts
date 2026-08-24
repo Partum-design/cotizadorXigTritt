@@ -24,11 +24,17 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
   const categoryById = new Map((categories ?? []).map((category) => [category.id, category.name]));
   const subtotal = parsed.data.items.reduce((sum, item) => sum + item.unitPrice * item.quantity, 0);
   const tax = Math.round(subtotal * .16 * 100) / 100;
-  const token = crypto.randomUUID().replaceAll("-", "");
+  const token = crypto.randomUUID();
   const timestamp = new Date();
-  const quoteNumber = `ADM-${timestamp.getFullYear().toString().slice(-2)}${String(timestamp.getMonth() + 1).padStart(2, "0")}${String(timestamp.getDate()).padStart(2, "0")}-${token.slice(0, 5).toUpperCase()}`;
-  const { data: quote, error: quoteError } = await supabase.from("quotes").insert({ quote_number: quoteNumber, lead_id: leadId, public_token: token, status: "draft", subtotal, tax, total: subtotal + tax, currency: "MXN", valid_hours: 72 }).select("id").single();
-  if (quoteError || !quote) return NextResponse.json({ error: "create_quote_failed" }, { status: 500 });
+  const quoteNumber = `ADM-${timestamp.getFullYear().toString().slice(-2)}${String(timestamp.getMonth() + 1).padStart(2, "0")}${String(timestamp.getDate()).padStart(2, "0")}-${token.replaceAll("-", "").slice(0, 5).toUpperCase()}`;
+  const { data: quote, error: quoteError } = await supabase.from("quotes").insert({ quote_number: quoteNumber, lead_id: leadId, public_token: token, status: "draft", subtotal, tax, total: subtotal + tax, currency: "MXN", valid_hours: 72, created_by: user.id }).select("id").single();
+  if (quoteError) {
+    if (quoteError.message.includes("quote_limit_reached")) {
+      return NextResponse.json({ error: "quote_limit_reached" }, { status: 403 });
+    }
+    return NextResponse.json({ error: "create_quote_failed" }, { status: 500 });
+  }
+  if (!quote) return NextResponse.json({ error: "create_quote_failed" }, { status: 500 });
   const lineItems = parsed.data.items.map((item) => {
     const product = productById.get(item.productId)!;
     const lineSubtotal = Math.round(item.unitPrice * item.quantity * 100) / 100;

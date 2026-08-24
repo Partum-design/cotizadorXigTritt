@@ -74,6 +74,7 @@ export interface Quote {
   invoiced: boolean;
   invoiced_at: string | null;
   admin_notes: string | null;
+  created_by: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -124,6 +125,7 @@ export interface Profile {
   email: string;
   full_name: string | null;
   role: "admin";
+  quote_limit: number | null;
   created_at: string;
 }
 

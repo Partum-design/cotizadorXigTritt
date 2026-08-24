@@ -51,7 +51,14 @@ export function AdminQuoteComposer({ customerId, customerName, products }: { cus
     const response = await fetch(`/api/admin/customers/${customerId}/quotes`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ items: items.map((item) => ({ productId: item.productId, capacityValue: item.capacityValue, material: item.material, power: item.power, quantity: item.quantity, unitPrice: item.unitPrice })) }) });
     const result = await response.json().catch(() => null);
     setCreating(false);
-    if (!response.ok || !result?.quoteId) { setError("No se pudo crear el borrador. Intenta nuevamente."); return; }
+    if (!response.ok || !result?.quoteId) {
+      setError(
+        result?.error === "quote_limit_reached"
+          ? "Esta cuenta alcanzó su límite de cotizaciones permitidas. Contacta a un administrador para ampliarlo."
+          : "No se pudo crear el borrador. Intenta nuevamente."
+      );
+      return;
+    }
     router.push(`/admin/cotizaciones/${result.quoteId}`); router.refresh();
   };
 

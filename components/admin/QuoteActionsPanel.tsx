@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { AlertTriangle, Check, Copy, Loader2, Mail, Receipt, Trash2 } from "lucide-react";
+import { AlertTriangle, Check, Copy, FileText, Loader2, Mail, Receipt, Trash2 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 
 export function QuoteActionsPanel({
@@ -79,6 +79,15 @@ export function QuoteActionsPanel({
   return (
     <div className="space-y-4 rounded-xl border border-brand-border bg-white p-5">
       <h2 className="font-semibold text-brand-navy">Acciones</h2>
+
+      <a
+        href={`/api/admin/quotes/${quoteId}/pdf`}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="flex w-full items-center justify-center gap-2 rounded-md bg-brand-blue px-4 py-2.5 text-sm font-semibold text-white hover:bg-brand-navy"
+      >
+        <FileText className="h-4 w-4" /> Ver PDF
+      </a>
 
       <button
         onClick={toggleInvoiced}

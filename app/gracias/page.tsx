@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { CheckCircle2, Mail } from "lucide-react";
+import { CheckCircle2, FileText, Mail } from "lucide-react";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
 
@@ -26,7 +26,7 @@ export default async function ThankYouPage({
             <Mail className="mr-1 inline h-4 w-4" /> Te enviamos el detalle a tu correo
             electr&oacute;nico. Es v&aacute;lida por 72 horas a partir de este momento.
           </p>
-          <div className="mt-8 flex gap-3">
+          <div className="mt-8 flex flex-wrap justify-center gap-3">
             {token && (
               <Link
                 href={`/cotizacion/${token}`}
@@ -34,6 +34,16 @@ export default async function ThankYouPage({
               >
                 Ver mi cotizaci&oacute;n
               </Link>
+            )}
+            {token && (
+              <a
+                href={`/api/quotes/${token}/pdf`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 rounded-md border border-brand-border px-6 py-3 text-sm font-semibold text-brand-navy hover:bg-slate-50"
+              >
+                <FileText className="h-4 w-4" /> Ver PDF
+              </a>
             )}
             <Link
               href="/productos"
