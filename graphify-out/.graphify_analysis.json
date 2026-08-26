@@ -1,0 +1,430 @@
+{
+  "communities": {
+    "0": [
+      "app_admin_protected_cotizaciones_id_page",
+      "app_admin_protected_cotizaciones_id_page_event_labels",
+      "app_admin_protected_cotizaciones_page",
+      "app_admin_protected_cotizaciones_page_chip",
+      "app_admin_protected_cotizaciones_page_quoterow",
+      "app_admin_protected_leads_id_page",
+      "app_admin_protected_leads_page",
+      "app_admin_protected_leads_page_adminleadspage",
+      "app_admin_protected_leads_page_filterchip",
+      "app_admin_protected_page",
+      "app_admin_protected_page_admindashboardpage",
+      "app_productos_page_productspage",
+      "components_admin_badge",
+      "components_admin_badge_status_labels",
+      "components_admin_badge_status_styles",
+      "components_admin_badge_statusbadge",
+      "components_admin_badge_temperature_labels",
+      "components_admin_badge_temperature_styles",
+      "components_admin_badge_temperaturebadge",
+      "components_admin_statcard",
+      "components_admin_statcard_statcard",
+      "lib_database_types",
+      "lib_database_types_database",
+      "lib_database_types_lead",
+      "lib_database_types_leadoverview",
+      "lib_database_types_leadtemperature",
+      "lib_database_types_profile",
+      "lib_database_types_quote",
+      "lib_database_types_quoteevent",
+      "lib_database_types_quoteitem",
+      "lib_database_types_quotestatus",
+      "lib_utils",
+      "lib_utils_cn",
+      "lib_utils_formatrelative"
+    ],
+    "1": [
+      "ref",
+      "ref_dom",
+      "ref_dom_iterable",
+      "ref_esnext",
+      "ref_mts",
+      "ref_next_dev_types_ts",
+      "ref_next_env_d_ts",
+      "ref_next_types_ts",
+      "ref_node_modules",
+      "ref_ts",
+      "ref_tsx",
+      "tsconfig",
+      "tsconfig_compileroptions",
+      "tsconfig_compileroptions_allowjs",
+      "tsconfig_compileroptions_esmoduleinterop",
+      "tsconfig_compileroptions_incremental",
+      "tsconfig_compileroptions_isolatedmodules",
+      "tsconfig_compileroptions_jsx",
+      "tsconfig_compileroptions_lib",
+      "tsconfig_compileroptions_module",
+      "tsconfig_compileroptions_moduleresolution",
+      "tsconfig_compileroptions_noemit",
+      "tsconfig_compileroptions_paths",
+      "tsconfig_compileroptions_plugins",
+      "tsconfig_compileroptions_resolvejsonmodule",
+      "tsconfig_compileroptions_skiplibcheck",
+      "tsconfig_compileroptions_strict",
+      "tsconfig_compileroptions_target",
+      "tsconfig_exclude",
+      "tsconfig_include",
+      "tsconfig_paths"
+    ],
+    "2": [
+      "app_admin_login_page",
+      "app_admin_login_page_adminloginpage",
+      "app_cotizar_page",
+      "app_cotizar_page_cartpage",
+      "app_gracias_page",
+      "app_gracias_page_thankyoupage",
+      "app_page",
+      "app_page_home",
+      "app_page_kind_meta",
+      "app_productos_page",
+      "app_productos_page_kind_labels",
+      "app_productos_slug_page",
+      "app_productos_slug_page_productdetailpage",
+      "components_catalog_productcard",
+      "components_catalog_productcard_productcard",
+      "components_catalog_productconfigurator",
+      "components_catalog_productconfigurator_productconfigurator",
+      "components_icons_producticon",
+      "components_site_footer",
+      "components_site_footer_footer",
+      "components_site_header",
+      "components_site_header_header",
+      "components_site_header_nav_links",
+      "components_site_logo",
+      "components_site_logo_logo",
+      "lib_cart_context_usecart",
+      "lib_database_types_product",
+      "lib_pricing",
+      "lib_pricing_computetotals",
+      "lib_pricing_estimateunitprice"
+    ],
+    "3": [
+      "app_admin_protected_categorias_page",
+      "app_admin_protected_categorias_page_admincategoriespage",
+      "app_admin_protected_categorias_page_kind_labels",
+      "app_admin_protected_productos_id_page",
+      "app_admin_protected_productos_id_page_editproductpage",
+      "app_admin_protected_productos_nuevo_page",
+      "app_admin_protected_productos_nuevo_page_newproductpage",
+      "app_admin_protected_productos_page",
+      "app_admin_protected_productos_page_adminproductspage",
+      "app_api_admin_quotes_id_resend_route",
+      "app_api_admin_quotes_id_resend_route_post",
+      "app_api_quotes_submit_route",
+      "app_api_quotes_submit_route_itemschema",
+      "app_api_quotes_submit_route_post",
+      "app_api_quotes_submit_route_submitschema",
+      "app_api_track_click_token_route",
+      "app_api_track_click_token_route_get",
+      "app_api_track_open_token_route",
+      "app_api_track_open_token_route_get",
+      "app_api_track_open_token_route_pixel",
+      "components_admin_productform",
+      "components_admin_productform_field",
+      "components_admin_productform_productform",
+      "components_admin_productform_slugify",
+      "components_icons_category_icons",
+      "lib_database_types_productcategory",
+      "lib_email_sendquoteemail",
+      "lib_supabase_server",
+      "lib_supabase_server_createclient"
+    ],
+    "4": [
+      "eslint",
+      "eslint_config_next",
+      "package",
+      "package_devdependencies",
+      "package_devdependencies_eslint",
+      "package_devdependencies_eslint_config_next",
+      "package_devdependencies_tailwindcss",
+      "package_devdependencies_tailwindcss_postcss",
+      "package_devdependencies_types_node",
+      "package_devdependencies_types_react",
+      "package_devdependencies_types_react_dom",
+      "package_devdependencies_typescript",
+      "package_name",
+      "package_private",
+      "package_scripts",
+      "package_scripts_build",
+      "package_scripts_dev",
+      "package_scripts_lint",
+      "package_scripts_start",
+      "package_version",
+      "tailwindcss",
+      "tailwindcss_postcss",
+      "types_node",
+      "types_react",
+      "types_react_dom",
+      "typescript"
+    ],
+    "5": [
+      "clsx",
+      "date_fns",
+      "lucide_react",
+      "next",
+      "package_dependencies",
+      "package_dependencies_clsx",
+      "package_dependencies_date_fns",
+      "package_dependencies_lucide_react",
+      "package_dependencies_next",
+      "package_dependencies_react",
+      "package_dependencies_react_dom",
+      "package_dependencies_resend",
+      "package_dependencies_supabase_ssr",
+      "package_dependencies_supabase_supabase_js",
+      "package_dependencies_tailwind_merge",
+      "package_dependencies_zod",
+      "react",
+      "react_dom",
+      "resend",
+      "supabase_ssr",
+      "supabase_supabase_js",
+      "tailwind_merge",
+      "zod"
+    ],
+    "6": [
+      "app_admin_protected_categorias_id_page",
+      "app_admin_protected_categorias_id_page_editcategorypage",
+      "app_admin_protected_categorias_nueva_page",
+      "app_admin_protected_categorias_nueva_page_newcategorypage",
+      "app_admin_protected_layout",
+      "app_admin_protected_layout_adminprotectedlayout",
+      "components_admin_categoryform",
+      "components_admin_categoryform_categoryform",
+      "components_admin_categoryform_slugify",
+      "components_admin_quoteactionspanel",
+      "components_admin_quoteactionspanel_quoteactionspanel",
+      "components_admin_sidebar",
+      "components_admin_sidebar_links",
+      "components_admin_sidebar_sidebar",
+      "components_quote_quoteactions",
+      "components_quote_quoteactions_quoteactions",
+      "lib_supabase_client",
+      "lib_supabase_client_createclient"
+    ],
+    "7": [
+      "app_admin_protected_cotizaciones_id_page_quotedetailpage",
+      "app_admin_protected_cotizaciones_page_adminquotespage",
+      "app_admin_protected_leads_id_page_leaddetailpage",
+      "app_cotizacion_token_page",
+      "app_cotizacion_token_page_banner",
+      "app_cotizacion_token_page_publicquote",
+      "app_cotizacion_token_page_publicquoteitem",
+      "app_cotizacion_token_page_publicquotepage",
+      "app_cotizacion_token_page_statusbadge",
+      "lib_email",
+      "lib_email_buildquoteemailhtml",
+      "lib_email_itemrow",
+      "lib_email_quoteemaildata",
+      "lib_email_quoteitemforemail",
+      "lib_utils_formatcurrency",
+      "lib_utils_formatdate"
+    ],
+    "8": [
+      "app_layout",
+      "app_layout_inter",
+      "app_layout_metadata",
+      "app_layout_rootlayout",
+      "lib_cart_context",
+      "lib_cart_context_cartcontext",
+      "lib_cart_context_cartcontextvalue",
+      "lib_cart_context_cartitem",
+      "lib_cart_context_cartprovider"
+    ],
+    "9": [
+      "components_icons",
+      "components_icons_base",
+      "components_icons_dispersericon",
+      "components_icons_grindericon",
+      "components_icons_iconprops",
+      "components_icons_kettleicon",
+      "components_icons_mixericon",
+      "components_icons_sieveicon",
+      "components_icons_tankicon"
+    ],
+    "10": [
+      "lib_supabase_proxy",
+      "lib_supabase_proxy_updatesession",
+      "proxy",
+      "proxy_config",
+      "proxy_proxy"
+    ],
+    "11": [
+      "eslint_config",
+      "eslint_config_eslintconfig"
+    ],
+    "12": [
+      "next_config",
+      "next_config_nextconfig"
+    ],
+    "13": [
+      "postcss_config",
+      "postcss_config_config"
+    ]
+  },
+  "cohesion": {
+    "0": 0.11764705882352941,
+    "1": 0.06451612903225806,
+    "2": 0.1632183908045977,
+    "3": 0.1354679802955665,
+    "4": 0.07692307692307693,
+    "5": 0.08695652173913043,
+    "6": 0.1895424836601307,
+    "7": 0.20833333333333334,
+    "8": 0.25,
+    "9": 0.2222222222222222,
+    "10": 0.6,
+    "11": 1.0,
+    "12": 1.0,
+    "13": 1.0
+  },
+  "gods": [
+    {
+      "id": "lib_supabase_server_createclient",
+      "label": "createClient()",
+      "degree": 39
+    },
+    {
+      "id": "lib_utils_formatcurrency",
+      "label": "formatCurrency()",
+      "degree": 24
+    },
+    {
+      "id": "tsconfig_compileroptions",
+      "label": "compilerOptions",
+      "degree": 16
+    },
+    {
+      "id": "lib_utils_cn",
+      "label": "cn()",
+      "degree": 14
+    },
+    {
+      "id": "lib_supabase_client_createclient",
+      "label": "createClient()",
+      "degree": 13
+    },
+    {
+      "id": "lib_database_types_productcategory",
+      "label": "ProductCategory",
+      "degree": 11
+    },
+    {
+      "id": "lib_utils_formatdate",
+      "label": "formatDate()",
+      "degree": 11
+    },
+    {
+      "id": "lib_database_types_product",
+      "label": "Product",
+      "degree": 10
+    },
+    {
+      "id": "components_site_header_header",
+      "label": "Header()",
+      "degree": 9
+    },
+    {
+      "id": "components_admin_badge_statusbadge",
+      "label": "StatusBadge()",
+      "degree": 7
+    }
+  ],
+  "surprises": [
+    {
+      "source": "EditCategoryPage()",
+      "target": "createClient()",
+      "source_files": [
+        "app/admin/(protected)/categorias/[id]/page.tsx",
+        "lib/supabase/server.ts"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "connects across different repos/directories; bridges separate communities; peripheral node `EditCategoryPage()` unexpectedly reaches hub `createClient()`"
+    },
+    {
+      "source": "AdminProtectedLayout()",
+      "target": "createClient()",
+      "source_files": [
+        "app/admin/(protected)/layout.tsx",
+        "lib/supabase/server.ts"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "connects across different repos/directories; bridges separate communities; peripheral node `AdminProtectedLayout()` unexpectedly reaches hub `createClient()`"
+    },
+    {
+      "source": "AdminLoginPage()",
+      "target": "createClient()",
+      "source_files": [
+        "app/admin/login/page.tsx",
+        "lib/supabase/client.ts"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "connects across different repos/directories; bridges separate communities; peripheral node `AdminLoginPage()` unexpectedly reaches hub `createClient()`"
+    },
+    {
+      "source": "Home()",
+      "target": "createClient()",
+      "source_files": [
+        "app/page.tsx",
+        "lib/supabase/server.ts"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "connects across different repos/directories; bridges separate communities; peripheral node `Home()` unexpectedly reaches hub `createClient()`"
+    },
+    {
+      "source": "ProductDetailPage()",
+      "target": "createClient()",
+      "source_files": [
+        "app/productos/[slug]/page.tsx",
+        "lib/supabase/server.ts"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "connects across different repos/directories; bridges separate communities; peripheral node `ProductDetailPage()` unexpectedly reaches hub `createClient()`"
+    }
+  ],
+  "questions": [
+    {
+      "type": "bridge_node",
+      "question": "Why does `createClient()` connect `createClient` to `database.types.ts`, `page.tsx`, `createClient`, `formatCurrency`?",
+      "why": "High betweenness centrality (0.088) - this node is a cross-community bridge."
+    },
+    {
+      "type": "bridge_node",
+      "question": "Why does `formatCurrency()` connect `formatCurrency` to `database.types.ts`, `page.tsx`, `createClient`?",
+      "why": "High betweenness centrality (0.035) - this node is a cross-community bridge."
+    },
+    {
+      "type": "bridge_node",
+      "question": "Why does `dependencies` connect `dependencies` to `devDependencies`?",
+      "why": "High betweenness centrality (0.029) - this node is a cross-community bridge."
+    },
+    {
+      "type": "isolated_nodes",
+      "question": "What connects `KIND_LABELS`, `EVENT_LABELS`, `QuoteRow` to the rest of the system?",
+      "why": "83 weakly-connected nodes found - possible documentation gaps or missing edges."
+    },
+    {
+      "type": "low_cohesion",
+      "question": "Should `database.types.ts` be split into smaller, more focused modules?",
+      "why": "Cohesion score 0.11764705882352941 - nodes in this community are weakly interconnected."
+    },
+    {
+      "type": "low_cohesion",
+      "question": "Should `compilerOptions` be split into smaller, more focused modules?",
+      "why": "Cohesion score 0.06451612903225806 - nodes in this community are weakly interconnected."
+    },
+    {
+      "type": "low_cohesion",
+      "question": "Should `createClient` be split into smaller, more focused modules?",
+      "why": "Cohesion score 0.1354679802955665 - nodes in this community are weakly interconnected."
+    }
+  ]
+}
