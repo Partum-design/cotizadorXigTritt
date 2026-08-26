@@ -14,6 +14,36 @@ export interface QuotePdfItem {
   subtotal: number;
 }
 
+export interface QuotePdfSourceItem {
+  product_name: string;
+  product_model: string | null;
+  capacity_value: number | null;
+  capacity_unit: string | null;
+  material: string | null;
+  power: string | null;
+  engraving: boolean;
+  engraving_text: string | null;
+  quantity: number;
+  unit_price: number | string;
+  subtotal: number | string;
+}
+
+export function mapQuoteItemsToPdf(items: QuotePdfSourceItem[]): QuotePdfItem[] {
+  return items.map((item) => ({
+    productName: item.product_name,
+    productModel: item.product_model,
+    capacityValue: item.capacity_value,
+    capacityUnit: item.capacity_unit,
+    material: item.material,
+    power: item.power,
+    engraving: item.engraving,
+    engravingText: item.engraving_text,
+    quantity: item.quantity,
+    unitPrice: Number(item.unit_price),
+    subtotal: Number(item.subtotal),
+  }));
+}
+
 export interface QuotePdfData {
   quoteNumber: string;
   status: string;

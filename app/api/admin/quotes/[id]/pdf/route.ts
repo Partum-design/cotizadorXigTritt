@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
-import { renderQuotePdf, type QuotePdfData } from "@/lib/quote-pdf";
+import { renderQuotePdf, mapQuoteItemsToPdf, type QuotePdfData } from "@/lib/quote-pdf";
 import type { Lead, Quote, QuoteItem } from "@/lib/database.types";
 
 export async function GET(_request: Request, { params }: { params: Promise<{ id: string }> }) {
@@ -36,19 +36,7 @@ export async function GET(_request: Request, { params }: { params: Promise<{ id:
     total: Number(quote.total),
     currency: quote.currency,
     lead: { fullName: lead.full_name, company: lead.company, email: lead.email, phone: lead.phone },
-    items: (items ?? []).map((item) => ({
-      productName: item.product_name,
-      productModel: item.product_model,
-      capacityValue: item.capacity_value,
-      capacityUnit: item.capacity_unit,
-      material: item.material,
-      power: item.power,
-      engraving: item.engraving,
-      engravingText: item.engraving_text,
-      quantity: item.quantity,
-      unitPrice: Number(item.unit_price),
-      subtotal: Number(item.subtotal),
-    })),
+    items: mapQuoteItemsToPdf(items ?? []),
     companyEmail: process.env.NEXT_PUBLIC_COMPANY_EMAIL ?? "tritton@mezcladorasymolinosindustriales.com.mx",
     companyPhone: process.env.NEXT_PUBLIC_COMPANY_PHONE ?? "",
   };

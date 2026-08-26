@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
-import { renderQuotePdf, type QuotePdfData } from "@/lib/quote-pdf";
+import { renderQuotePdf, mapQuoteItemsToPdf, type QuotePdfData } from "@/lib/quote-pdf";
 import type { PublicQuote } from "@/components/quote/QuoteMicrosite";
 
 export async function GET(_request: Request, { params }: { params: Promise<{ token: string }> }) {
@@ -27,19 +27,7 @@ export async function GET(_request: Request, { params }: { params: Promise<{ tok
       email: quote.lead.email,
       phone: quote.lead.phone,
     },
-    items: quote.items.map((item) => ({
-      productName: item.product_name,
-      productModel: item.product_model,
-      capacityValue: item.capacity_value,
-      capacityUnit: item.capacity_unit,
-      material: item.material,
-      power: item.power,
-      engraving: item.engraving,
-      engravingText: item.engraving_text,
-      quantity: item.quantity,
-      unitPrice: Number(item.unit_price),
-      subtotal: Number(item.subtotal),
-    })),
+    items: mapQuoteItemsToPdf(quote.items),
     companyEmail: process.env.NEXT_PUBLIC_COMPANY_EMAIL ?? "tritton@mezcladorasymolinosindustriales.com.mx",
     companyPhone: process.env.NEXT_PUBLIC_COMPANY_PHONE ?? "",
   };

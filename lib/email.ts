@@ -49,8 +49,9 @@ function itemRow(item: QuoteItemForEmail) {
   </tr>`;
 }
 
-export function buildQuoteEmailHtml(data: QuoteEmailData) {
+export function buildQuoteEmailHtml(data: QuoteEmailData, hasPdfAttachment = true) {
   const viewUrl = `${SITE_URL}/api/track/click/${data.token}?to=${encodeURIComponent(`/cotizacion/${data.token}`)}`;
+  const pdfUrl = `${SITE_URL}/api/quotes/${data.token}/pdf`;
   const pixelUrl = `${SITE_URL}/api/track/open/${data.token}`;
 
   return `<!doctype html>
@@ -65,7 +66,7 @@ export function buildQuoteEmailHtml(data: QuoteEmailData) {
         </td></tr>
         <tr><td style="padding:32px;">
           <h1 style="margin:0 0 4px;font-size:20px;color:#16232b;">Tu cotizaci&oacute;n ${data.quoteNumber}</h1>
-          <p style="color:#475569;font-size:14px;line-height:1.6;">Hola ${data.leadName}, gracias por tu inter&eacute;s. Aqu&iacute; tienes el resumen de tu cotizaci&oacute;n:</p>
+          <p style="color:#475569;font-size:14px;line-height:1.6;">Hola ${data.leadName}, gracias por tu inter&eacute;s. Aqu&iacute; tienes el resumen de tu cotizaci&oacute;n${hasPdfAttachment ? ", con el PDF adjunto listo para descargar o compartir" : ""}:</p>
 
           <table width="100%" cellpadding="0" cellspacing="0" style="margin-top:16px;">
             ${data.items.map(itemRow).join("")}
@@ -84,6 +85,9 @@ export function buildQuoteEmailHtml(data: QuoteEmailData) {
           <div style="text-align:center;margin-top:28px;">
             <a href="${viewUrl}" style="display:inline-block;background:#3689b2;color:#ffffff;text-decoration:none;font-weight:700;font-size:14px;padding:14px 28px;border-radius:8px;">Ver mi cotizaci&oacute;n y aceptar</a>
           </div>
+          <div style="text-align:center;margin-top:12px;">
+            <a href="${pdfUrl}" style="display:inline-block;color:#1e4d64;text-decoration:none;font-weight:600;font-size:13px;padding:8px 16px;">Descargar PDF</a>
+          </div>
           <p style="text-align:center;color:#94a3b8;font-size:11px;margin-top:24px;">N&uacute;mero de cotizaci&oacute;n: ${data.quoteNumber}</p>
         </td></tr>
         <tr><td style="background:#f8fafc;padding:20px 32px;color:#94a3b8;font-size:11px;text-align:center;">
@@ -97,7 +101,7 @@ export function buildQuoteEmailHtml(data: QuoteEmailData) {
 </html>`;
 }
 
-export async function sendQuoteEmail(to: string, data: QuoteEmailData) {
+export async function sendQuoteEmail(to: string, data: QuoteEmailData, pdfBuffer?: Buffer) {
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) {
     console.warn("[email] RESEND_API_KEY no configurado; se omite el envío del correo.");
@@ -113,6 +117,9 @@ export async function sendQuoteEmail(to: string, data: QuoteEmailData) {
       to,
       subject: `Tu cotización ${data.quoteNumber} · TRITTÓN`,
       html: buildQuoteEmailHtml(data),
+      attachments: pdfBuffer
+        ? [{ filename: `Cotizacion-${data.quoteNumber}.pdf`, content: pdfBuffer, contentType: "application/pdf" }]
+        : undefined,
     });
     return { sent: true as const };
   } catch (err) {

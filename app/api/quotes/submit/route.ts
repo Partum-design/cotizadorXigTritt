@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
 import { sendQuoteEmail } from "@/lib/email";
+import { renderQuotePdf, mapQuoteItemsToPdf, type QuotePdfData } from "@/lib/quote-pdf";
 
 const itemSchema = z.object({
   productId: z.string().uuid(),
@@ -75,20 +76,54 @@ export async function POST(request: Request) {
 
   const { data: quoteRow } = await supabase
     .from("quotes")
-    .select("valid_until")
+    .select("valid_until, currency, created_at")
     .eq("public_token", result.token)
     .maybeSingle();
 
-  const emailResult = await sendQuoteEmail(lead.email, {
-    token: result.token,
+  const validUntil =
+    (quoteRow as { valid_until: string } | null)?.valid_until ?? new Date(Date.now() + 72 * 3600 * 1000).toISOString();
+  const currency = (quoteRow as { currency: string } | null)?.currency ?? "MXN";
+  const createdAt = (quoteRow as { created_at: string } | null)?.created_at ?? new Date().toISOString();
+
+  const pdfData: QuotePdfData = {
     quoteNumber: result.quote_number,
-    leadName: lead.fullName,
-    subtotal: result.subtotal,
-    tax: result.tax,
-    total: result.total,
-    validUntil: (quoteRow as { valid_until: string } | null)?.valid_until ?? new Date(Date.now() + 72 * 3600 * 1000).toISOString(),
-    items: result.items as never,
+    status: "sent",
+    createdAt,
+    validUntil,
+    subtotal: Number(result.subtotal),
+    tax: Number(result.tax),
+    total: Number(result.total),
+    currency,
+    lead: {
+      fullName: lead.fullName,
+      company: lead.company || null,
+      email: lead.email,
+      phone: lead.phone || null,
+    },
+    items: mapQuoteItemsToPdf(result.items as never),
+    companyEmail: process.env.NEXT_PUBLIC_COMPANY_EMAIL ?? "tritton@mezcladorasymolinosindustriales.com.mx",
+    companyPhone: process.env.NEXT_PUBLIC_COMPANY_PHONE ?? "",
+  };
+
+  const pdfBuffer = await renderQuotePdf(pdfData).catch((err) => {
+    console.error("[quotes/submit] PDF render error:", err);
+    return null;
   });
+
+  const emailResult = await sendQuoteEmail(
+    lead.email,
+    {
+      token: result.token,
+      quoteNumber: result.quote_number,
+      leadName: lead.fullName,
+      subtotal: result.subtotal,
+      tax: result.tax,
+      total: result.total,
+      validUntil,
+      items: result.items as never,
+    },
+    pdfBuffer ?? undefined
+  );
 
   return NextResponse.json({
     token: result.token,
