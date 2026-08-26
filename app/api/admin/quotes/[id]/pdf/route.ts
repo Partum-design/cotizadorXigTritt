@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
-import { renderQuotePdf, type QuotePdfData } from "@/lib/quote-pdf";
+import { renderQuotePdf } from "@/lib/quote-pdf";
+import { buildQuotePdfData } from "@/lib/quote-pdf-data";
 import type { Lead, Quote, QuoteItem } from "@/lib/database.types";
 
 export async function GET(_request: Request, { params }: { params: Promise<{ id: string }> }) {
@@ -26,32 +27,7 @@ export async function GET(_request: Request, { params }: { params: Promise<{ id:
   ]);
   if (!lead) return new Response("lead_not_found", { status: 404 });
 
-  const pdfData: QuotePdfData = {
-    quoteNumber: quote.quote_number,
-    status: quote.status,
-    createdAt: quote.created_at,
-    validUntil: quote.valid_until,
-    subtotal: Number(quote.subtotal),
-    tax: Number(quote.tax),
-    total: Number(quote.total),
-    currency: quote.currency,
-    lead: { fullName: lead.full_name, company: lead.company, email: lead.email, phone: lead.phone },
-    items: (items ?? []).map((item) => ({
-      productName: item.product_name,
-      productModel: item.product_model,
-      capacityValue: item.capacity_value,
-      capacityUnit: item.capacity_unit,
-      material: item.material,
-      power: item.power,
-      engraving: item.engraving,
-      engravingText: item.engraving_text,
-      quantity: item.quantity,
-      unitPrice: Number(item.unit_price),
-      subtotal: Number(item.subtotal),
-    })),
-    companyEmail: process.env.NEXT_PUBLIC_COMPANY_EMAIL ?? "tritton@mezcladorasymolinosindustriales.com.mx",
-    companyPhone: process.env.NEXT_PUBLIC_COMPANY_PHONE ?? "",
-  };
+  const pdfData = buildQuotePdfData({ quote, lead, items: items ?? [], createdAt: quote.created_at });
 
   const pdf = await renderQuotePdf(pdfData);
 

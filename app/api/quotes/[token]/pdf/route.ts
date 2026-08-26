@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
-import { renderQuotePdf, type QuotePdfData } from "@/lib/quote-pdf";
+import { renderQuotePdf } from "@/lib/quote-pdf";
+import { buildQuotePdfData } from "@/lib/quote-pdf-data";
 import type { PublicQuote } from "@/components/quote/QuoteMicrosite";
 
 export async function GET(_request: Request, { params }: { params: Promise<{ token: string }> }) {
@@ -12,37 +13,12 @@ export async function GET(_request: Request, { params }: { params: Promise<{ tok
     return new Response("Cotización no encontrada", { status: 404 });
   }
 
-  const pdfData: QuotePdfData = {
-    quoteNumber: quote.quote_number,
-    status: quote.status,
+  const pdfData = buildQuotePdfData({
+    quote,
+    lead: quote.lead,
+    items: quote.items,
     createdAt: quote.sent_at ?? null,
-    validUntil: quote.valid_until,
-    subtotal: Number(quote.subtotal),
-    tax: Number(quote.tax),
-    total: Number(quote.total),
-    currency: quote.currency,
-    lead: {
-      fullName: quote.lead.full_name,
-      company: quote.lead.company,
-      email: quote.lead.email,
-      phone: quote.lead.phone,
-    },
-    items: quote.items.map((item) => ({
-      productName: item.product_name,
-      productModel: item.product_model,
-      capacityValue: item.capacity_value,
-      capacityUnit: item.capacity_unit,
-      material: item.material,
-      power: item.power,
-      engraving: item.engraving,
-      engravingText: item.engraving_text,
-      quantity: item.quantity,
-      unitPrice: Number(item.unit_price),
-      subtotal: Number(item.subtotal),
-    })),
-    companyEmail: process.env.NEXT_PUBLIC_COMPANY_EMAIL ?? "tritton@mezcladorasymolinosindustriales.com.mx",
-    companyPhone: process.env.NEXT_PUBLIC_COMPANY_PHONE ?? "",
-  };
+  });
 
   const pdf = await renderQuotePdf(pdfData);
 

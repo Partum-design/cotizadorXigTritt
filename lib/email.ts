@@ -49,7 +49,7 @@ function itemRow(item: QuoteItemForEmail) {
   </tr>`;
 }
 
-export function buildQuoteEmailHtml(data: QuoteEmailData) {
+export function buildQuoteEmailHtml(data: QuoteEmailData, hasPdf: boolean) {
   const viewUrl = `${SITE_URL}/api/track/click/${data.token}?to=${encodeURIComponent(`/cotizacion/${data.token}`)}`;
   const pixelUrl = `${SITE_URL}/api/track/open/${data.token}`;
 
@@ -65,7 +65,7 @@ export function buildQuoteEmailHtml(data: QuoteEmailData) {
         </td></tr>
         <tr><td style="padding:32px;">
           <h1 style="margin:0 0 4px;font-size:20px;color:#16232b;">Tu cotizaci&oacute;n ${data.quoteNumber}</h1>
-          <p style="color:#475569;font-size:14px;line-height:1.6;">Hola ${data.leadName}, gracias por tu inter&eacute;s. Aqu&iacute; tienes el resumen de tu cotizaci&oacute;n:</p>
+          <p style="color:#475569;font-size:14px;line-height:1.6;">Hola ${data.leadName}, gracias por tu inter&eacute;s. Aqu&iacute; tienes el resumen de tu cotizaci&oacute;n${hasPdf ? "; te la adjuntamos tambi&eacute;n en PDF" : ""}:</p>
 
           <table width="100%" cellpadding="0" cellspacing="0" style="margin-top:16px;">
             ${data.items.map(itemRow).join("")}
@@ -97,7 +97,7 @@ export function buildQuoteEmailHtml(data: QuoteEmailData) {
 </html>`;
 }
 
-export async function sendQuoteEmail(to: string, data: QuoteEmailData) {
+export async function sendQuoteEmail(to: string, data: QuoteEmailData, pdfBuffer?: Buffer | null) {
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) {
     console.warn("[email] RESEND_API_KEY no configurado; se omite el envío del correo.");
@@ -112,7 +112,10 @@ export async function sendQuoteEmail(to: string, data: QuoteEmailData) {
       from,
       to,
       subject: `Tu cotización ${data.quoteNumber} · TRITTÓN`,
-      html: buildQuoteEmailHtml(data),
+      html: buildQuoteEmailHtml(data, Boolean(pdfBuffer)),
+      attachments: pdfBuffer
+        ? [{ filename: `Cotizacion-${data.quoteNumber}.pdf`, content: pdfBuffer, contentType: "application/pdf" }]
+        : undefined,
     });
     return { sent: true as const };
   } catch (err) {

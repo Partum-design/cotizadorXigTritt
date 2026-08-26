@@ -23,8 +23,9 @@ export interface QuotePdfData {
   tax: number;
   total: number;
   currency: string;
-  lead: { fullName: string; company: string | null; email: string; phone: string | null };
+  lead: { fullName: string; company: string | null; email: string; phone: string | null; notes?: string | null };
   items: QuotePdfItem[];
+  companyName: string;
   companyEmail: string;
   companyPhone: string;
 }
@@ -62,6 +63,16 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "flex-start",
   },
+  brandRow: { flexDirection: "row", alignItems: "center", gap: 10 },
+  monogram: {
+    width: 32,
+    height: 32,
+    borderRadius: 4,
+    backgroundColor: "#ffffff",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  monogramText: { fontSize: 15, fontFamily: "Helvetica-Bold", color: BLUE },
   brand: { fontSize: 20, fontFamily: "Helvetica-Bold", letterSpacing: 1 },
   brandSub: { fontSize: 8, color: "#bfe0ee", marginTop: 3, textTransform: "uppercase", letterSpacing: 1 },
   headerRight: { alignItems: "flex-end" },
@@ -121,6 +132,16 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
   noticeText: { fontSize: 8.5, color: "#9a3412", lineHeight: 1.4 },
+  notesBox: {
+    marginTop: 12,
+    padding: 10,
+    backgroundColor: "#f8fafc",
+    borderWidth: 1,
+    borderColor: BORDER,
+    borderRadius: 4,
+  },
+  notesLabel: { fontSize: 7, color: MUTED, textTransform: "uppercase", letterSpacing: 0.6, marginBottom: 4 },
+  notesText: { fontSize: 8.5, color: "#334155", lineHeight: 1.4 },
   terms: { marginTop: 16, fontSize: 8.5, color: "#475569", lineHeight: 1.5 },
   footer: {
     position: "absolute",
@@ -150,12 +171,17 @@ export function QuotePdfDocument({ data }: { data: QuotePdfData }) {
   const recipient = data.lead.company ? `${data.lead.fullName} · ${data.lead.company}` : data.lead.fullName;
 
   return (
-    <Document title={`Cotización ${data.quoteNumber}`} author="TRITTÓN">
+    <Document title={`Cotización ${data.quoteNumber}`} author={data.companyName}>
       <Page size="A4" style={styles.page}>
         <View style={styles.header} fixed>
-          <View>
-            <Text style={styles.brand}>TRITTÓN</Text>
-            <Text style={styles.brandSub}>Mezcladoras &amp; Trituradoras Industriales</Text>
+          <View style={styles.brandRow}>
+            <View style={styles.monogram}>
+              <Text style={styles.monogramText}>{data.companyName.trim().charAt(0) || "T"}</Text>
+            </View>
+            <View>
+              <Text style={styles.brand}>{data.companyName}</Text>
+              <Text style={styles.brandSub}>Mezcladoras &amp; Trituradoras Industriales</Text>
+            </View>
           </View>
           <View style={styles.headerRight}>
             <Text style={styles.quoteNumber}>{data.quoteNumber}</Text>
@@ -233,6 +259,13 @@ export function QuotePdfDocument({ data }: { data: QuotePdfData }) {
             </View>
           ) : null}
 
+          {data.lead.notes ? (
+            <View style={styles.notesBox}>
+              <Text style={styles.notesLabel}>Notas del cliente</Text>
+              <Text style={styles.notesText}>{data.lead.notes}</Text>
+            </View>
+          ) : null}
+
           <Text style={styles.terms}>
             Incluye fabricación, manual de operación y certificado de calidad del acero cuando aplique. Entrega
             estimada de 10 a 12 semanas después del anticipo. Forma de pago: 70% anticipo / 30% al aviso de entrega.
@@ -241,7 +274,7 @@ export function QuotePdfDocument({ data }: { data: QuotePdfData }) {
 
         <View style={styles.footer} fixed>
           <Text style={styles.footerText}>
-            TRITTÓN · {data.companyPhone} · {data.companyEmail}
+            {data.companyName} · {data.companyPhone} · {data.companyEmail}
           </Text>
           <Text
             style={styles.footerText}

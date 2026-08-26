@@ -2,6 +2,9 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
 import { sendQuoteEmail } from "@/lib/email";
+import { renderQuotePdf } from "@/lib/quote-pdf";
+import { buildQuotePdfData } from "@/lib/quote-pdf-data";
+import type { Quote, QuoteItem } from "@/lib/database.types";
 
 const itemSchema = z.object({
   productId: z.string().uuid(),
@@ -73,22 +76,44 @@ export async function POST(request: Request) {
     console.error("[quotes/submit] mark_quote_sent error:", markSentError);
   }
 
-  const { data: quoteRow } = await supabase
-    .from("quotes")
-    .select("valid_until")
-    .eq("public_token", result.token)
-    .maybeSingle();
+  const [{ data: quoteRow }, { data: quoteItems }] = await Promise.all([
+    supabase.from("quotes").select("*").eq("public_token", result.token).maybeSingle() as unknown as Promise<{
+      data: Quote | null;
+    }>,
+    supabase.from("quote_items").select("*").eq("quote_id", result.quote_id).order("created_at") as unknown as Promise<{
+      data: QuoteItem[] | null;
+    }>,
+  ]);
 
-  const emailResult = await sendQuoteEmail(lead.email, {
-    token: result.token,
-    quoteNumber: result.quote_number,
-    leadName: lead.fullName,
-    subtotal: result.subtotal,
-    tax: result.tax,
-    total: result.total,
-    validUntil: (quoteRow as { valid_until: string } | null)?.valid_until ?? new Date(Date.now() + 72 * 3600 * 1000).toISOString(),
-    items: result.items as never,
-  });
+  let pdfBuffer: Buffer | null = null;
+  if (quoteRow) {
+    try {
+      const pdfData = buildQuotePdfData({
+        quote: quoteRow,
+        lead: { full_name: lead.fullName, company: lead.company || null, email: lead.email, phone: lead.phone || null, notes: lead.notes || null },
+        items: quoteItems ?? [],
+        createdAt: quoteRow.created_at,
+      });
+      pdfBuffer = await renderQuotePdf(pdfData);
+    } catch (err) {
+      console.error("[quotes/submit] Error generando PDF:", err);
+    }
+  }
+
+  const emailResult = await sendQuoteEmail(
+    lead.email,
+    {
+      token: result.token,
+      quoteNumber: result.quote_number,
+      leadName: lead.fullName,
+      subtotal: result.subtotal,
+      tax: result.tax,
+      total: result.total,
+      validUntil: quoteRow?.valid_until ?? new Date(Date.now() + 72 * 3600 * 1000).toISOString(),
+      items: result.items as never,
+    },
+    pdfBuffer
+  );
 
   return NextResponse.json({
     token: result.token,
